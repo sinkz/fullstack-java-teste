@@ -18,9 +18,13 @@ public class Cliente {
 	private String razaoSocial;
 	@Enumerated(EnumType.STRING)
 	private RegimeTributario regimeTributario;
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
-	private List<Anexo> anexos;
 	private String email;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
+	private List<AnexoCliente> anexos;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
+	private List<Nota> notas;
 
 	public String getCnpj() {
 		return cnpj;
@@ -46,11 +50,11 @@ public class Cliente {
 		this.regimeTributario = regimeTributario;
 	}
 
-	public List<Anexo> getAnexos() {
+	public List<AnexoCliente> getAnexos() {
 		return anexos;
 	}
 
-	public void setAnexos(List<Anexo> anexos) {
+	public void setAnexos(List<AnexoCliente> anexos) {
 		this.anexos = anexos;
 	}
 
@@ -60,6 +64,14 @@ public class Cliente {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public List<Nota> getNotas() {
+		return notas;
+	}
+
+	public void setNotas(List<Nota> notas) {
+		this.notas = notas;
 	}
 
 }

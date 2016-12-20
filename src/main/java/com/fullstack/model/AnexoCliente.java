@@ -12,17 +12,18 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class Anexo {
+public class AnexoCliente {
 
 	@Id
 	@GeneratedValue
 	private Long id;
-	private String caminhoArquivo;
+	private String nomeAnexo;
+	private String caminhoAnexo;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCriacao;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "type", referencedColumnName = "cnpj", nullable = false)
+	@JoinColumn(name = "cliente_cnpj", referencedColumnName = "cnpj", nullable = false)
 	private Cliente cliente;
 
 	public Long getId() {
@@ -33,12 +34,20 @@ public class Anexo {
 		this.id = id;
 	}
 
-	public String getCaminhoArquivo() {
-		return caminhoArquivo;
+	public String getNomeAnexo() {
+		return nomeAnexo;
 	}
 
-	public void setCaminhoArquivo(String caminhoArquivo) {
-		this.caminhoArquivo = caminhoArquivo;
+	public void setNomeAnexo(String nomeAnexo) {
+		this.nomeAnexo = nomeAnexo;
+	}
+
+	public String getCaminhoAnexo() {
+		return caminhoAnexo;
+	}
+
+	public void setCaminhoAnexo(String caminhoAnexo) {
+		this.caminhoAnexo = caminhoAnexo;
 	}
 
 	public Date getDataCriacao() {

@@ -10,7 +10,7 @@
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="connection.url">jdbc:mysql://localhost:3306/fullstack-java-teste?autoReconnect=true</property>
 		<property name="connection.username">root</property>
-		<property name="connection.password"></property>
+		<property name="connection.password">S0eusei#@</property>
 		<property name="connection.autoReconnect">true</property>
 		<property name="connection.autoReconnectForPools">true</property>
 
@@ -24,9 +24,13 @@
 		<property name="show_sql">true</property>
 
 		<!-- Drop and re-create the database schema on startup -->
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">create</property>
 		<mapping class="com.fullstack.model.Cliente" />
-		<mapping class="com.fullstack.model.Anexo" />
+		<mapping class="com.fullstack.model.AnexoCliente" />
+		<mapping class="com.fullstack.model.Competencia" />
+		<mapping class="com.fullstack.model.Imposto" />
+		<mapping class="com.fullstack.model.Nota" />
+		<mapping class="com.fullstack.model.AnexoNota"/>
 
 	</session-factory>
 

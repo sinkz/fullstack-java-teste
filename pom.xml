@@ -7,7 +7,6 @@
 	<packaging>war</packaging>
 	<name>FullstackJava</name>
 
-
 	<repositories>
 		<repository>
 			<id>maven2-repository.java.net</id>
@@ -20,8 +19,6 @@
 		<jersey2.version>2.19</jersey2.version>
 		<jaxrs.version>2.0.1</jaxrs.version>
 	</properties>
-
-
 
 	<dependencies>
 		<dependency>
