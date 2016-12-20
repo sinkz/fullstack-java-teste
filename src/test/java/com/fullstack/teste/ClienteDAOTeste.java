@@ -13,9 +13,9 @@ public class ClienteDAOTeste {
 	public void salvar(){
 		ClienteDAO clienteDAO = new ClienteDAO();
 		Cliente cliente = new Cliente();
-		cliente.setCnpj("18.923.586/0001-21");
-		cliente.setRazaoSocial("UnionDev");
-		cliente.setRegimeTributario(RegimeTributario.Lucro_Presumido);
+		cliente.setCnpj("13.421.123/0001-44");
+		cliente.setRazaoSocial("Unimed");
+		cliente.setRegimeTributario(RegimeTributario.Simples_Nacional);
 		clienteDAO.salvar(cliente);
 	}
 
