@@ -13,7 +13,7 @@ public class ClienteDAOTeste {
 	public void salvar(){
 		ClienteDAO clienteDAO = new ClienteDAO();
 		Cliente cliente = new Cliente();
-		cliente.setCnpj("13.421.123/0001-44");
+		cliente.setCnpj(13421123000144L);
 		cliente.setRazaoSocial("Unimed");
 		cliente.setRegimeTributario(RegimeTributario.Simples_Nacional);
 		clienteDAO.salvar(cliente);

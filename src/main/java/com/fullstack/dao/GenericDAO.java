@@ -20,13 +20,14 @@ public abstract class GenericDAO<T> {
 		this.classe = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
-	public void salvar(T entity) {
+	public T salvar(T entity) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		try {
 			transacao = session.beginTransaction();
 			session.save(entity);
 			transacao.commit();
+			return entity;
 		} catch (RuntimeException e) {
 			if (transacao != null)
 				transacao.rollback();
@@ -90,14 +91,14 @@ public abstract class GenericDAO<T> {
 		}
 	}
 
-	public boolean alterar(T entity) {
+	public T alterar(T entity) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		try {
 			transacao = session.beginTransaction();
 			session.update(entity);
 			transacao.commit();
-			return true;
+			return entity;
 		} catch (RuntimeException e) {
 			if (transacao != null)
 				transacao.rollback();

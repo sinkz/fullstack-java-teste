@@ -1,0 +1,24 @@
+{
+  "name": "webapp",
+  "homepage": "https://github.com/sinkz/fullstack-java-teste",
+  "description": "Front-End",
+  "main": "app.js",
+  "keywords": [
+    "java",
+    "fullstack",
+    "mysql",
+    "jersey",
+    "angularjs"
+  ],
+  "authors": [
+    "diih_augusto@live.com"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
