@@ -2,10 +2,9 @@
     'use strict';
 
     angular
-        .module('FullStackTeste', ['ngMaterial', 'ui.router', 'ngMessages'])
-        .constant('apiUrl', 'http://localhost:60806/api/')
-        .constant('apiBaseUrl', 'http://localhost:60806/')
+        .module('FullStackTeste', ['ngMaterial', 'ui.router', 'ngMessages', 'ngFileUpload'])
+        .constant('apiUrl', 'http://localhost:8080/FullstackJava/rest')
+        .constant('apiBaseUrl', 'http://localhost:8080/FullstackJava')
 
-        console.log("Teste")
 
 })();

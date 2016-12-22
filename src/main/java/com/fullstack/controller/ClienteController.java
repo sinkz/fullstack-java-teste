@@ -1,5 +1,6 @@
 package com.fullstack.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fullstack.dao.ClienteDAO;
+import com.fullstack.model.AnexoCliente;
 import com.fullstack.model.Cliente;
 
 @Path("/cliente")
@@ -24,10 +26,15 @@ public class ClienteController {
 	@Consumes("application/json")
 	public Response salvarCliente(Cliente cliente) {
 		try {
+			for(AnexoCliente a : cliente.getAnexos()){
+				a.setDataCriacao(new Date());
+				a.setCliente(cliente);
+			}
 			ClienteDAO clienteDAO = new ClienteDAO();
 			clienteDAO.salvar(cliente);
 			return Response.ok().build();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -65,9 +72,15 @@ public class ClienteController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listarTodos() {
-		ClienteDAO clienteDAO = new ClienteDAO();
-		List<Cliente> clientes = clienteDAO.listAll();
-		return Response.status(200).entity(clientes).build();
+		try {
+			ClienteDAO clienteDAO = new ClienteDAO();
+			List<Cliente> clientes = clienteDAO.listAll();
+			return Response.status(200).entity(clientes).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		
 	}
 	
 

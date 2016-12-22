@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class AnexoCliente {
 
@@ -22,7 +24,8 @@ public class AnexoCliente {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCriacao;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "cliente_cnpj", referencedColumnName = "cnpj", nullable = false)
 	private Cliente cliente;
 
