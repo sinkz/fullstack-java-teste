@@ -1,0 +1,46 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <md-card>
+        <md-card-content layout-padding>
+            <form name="clienteForm">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex="30">
+                        <input ng-model="vm.cliente.cnpj" placeholder="CNPJ" required>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <input ng-model="vm.cliente.razaoSocial" placeholder="Razão Social" required>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <input ng-model="vm.cliente.email" placeholder="Email" required>
+                    </md-input-container>
+                </div>
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex=40>
+                        <label>Regime Tributário</label>
+                        <md-select ng-model="vm.cliente.regimeTributario" required>
+                            <md-option value="Simples Nacional">
+                                Simples Nacional
+                            </md-option>
+                            <md-option value="Lucro Presumido">
+                                Lucro Presumido
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <input ng-model="vm.cliente.anexos" placeholder="Anexos">
+                    </md-input-container>
+                    <md-button class="md-fab md-mini md-primary" aria-label="Use Android" ngf-select="uploadFiles($files, $invalidFiles)"
+                        multiple  ngf-max-height="5000" ngf-max-size="5MB">
+                        <md-icon md-svg-src="app/icons/upload.svg" style="color: greenyellow;"></md-icon>
+                    </md-button>
+                </div>
+
+                <md-dialog-actions layout="row">
+                    <md-button ng-click="answer(vm.cliente)">
+                        Salvar
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-card-content>
+    </md-card>
+</md-dialog>
+

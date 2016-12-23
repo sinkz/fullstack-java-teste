@@ -6,6 +6,10 @@
 
     function clienteAPI($http, apiUrl) {
 
+        this.login = function (cliente) {
+            return $http.post(apiUrl + '/cliente/login', cliente);
+        };
+
         this.salvar = function (cliente) {
             return $http.post(apiUrl + '/cliente/salvar', cliente);
         };

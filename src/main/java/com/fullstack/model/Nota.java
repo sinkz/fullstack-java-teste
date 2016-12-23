@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 public class Nota {
 
 	@Id
-	private String numeroNota;
+	private Long numeroNota;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataEmissao;
 	private String descricao;
@@ -29,17 +29,15 @@ public class Nota {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_cnpj", referencedColumnName = "cnpj", nullable = false)
 	private Cliente cliente;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "nota", cascade = CascadeType.ALL)
 	private List<AnexoNota> anexos;
 
-
-
-	public String getNumeroNota() {
+	public Long getNumeroNota() {
 		return numeroNota;
 	}
 
-	public void setNumeroNota(String numeroNota) {
+	public void setNumeroNota(Long numeroNota) {
 		this.numeroNota = numeroNota;
 	}
 
@@ -73,6 +71,14 @@ public class Nota {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public List<AnexoNota> getAnexos() {
+		return anexos;
+	}
+
+	public void setAnexos(List<AnexoNota> anexos) {
+		this.anexos = anexos;
 	}
 
 }

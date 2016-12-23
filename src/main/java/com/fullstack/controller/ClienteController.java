@@ -26,13 +26,34 @@ public class ClienteController {
 	@Consumes("application/json")
 	public Response salvarCliente(Cliente cliente) {
 		try {
-			for(AnexoCliente a : cliente.getAnexos()){
-				a.setDataCriacao(new Date());
-				a.setCliente(cliente);
+			if (cliente.getAnexos().size() != 0) {
+				for (AnexoCliente a : cliente.getAnexos()) {
+					a.setDataCriacao(new Date());
+					a.setCliente(cliente);
+				}
 			}
 			ClienteDAO clienteDAO = new ClienteDAO();
 			clienteDAO.salvar(cliente);
 			return Response.ok().build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@POST
+	@Path("/login")
+	@Consumes("application/json")
+	public Response login(Cliente cliente) {
+		try {
+
+			ClienteDAO clienteDAO = new ClienteDAO();
+			cliente = clienteDAO.buscarPorCodigo(cliente.getCnpj());
+			if (cliente != null) {
+				return Response.status(200).entity(cliente).build();
+			} else {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -80,9 +101,8 @@ public class ClienteController {
 			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
-		
+
 	}
-	
 
 	@Path("/buscarPorCodigo/{cnpj}")
 	@GET

@@ -5,9 +5,18 @@
         .config(configFunction);
 
     function configFunction($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/home");
+        $urlRouterProvider.otherwise("/login");
 
         $stateProvider
+         .state('login', {
+                url: "/login",
+                views: {
+                    "main": {
+                        templateUrl: "app/views/login.html",
+                        controller: 'LoginController as vm'
+                    }
+                }
+            })
             .state('home', {
                 url: "/home",
                 views: {
@@ -17,13 +26,13 @@
                     }
                 }
             })
-            .state('clientes', {
+            .state('notas', {
                 parent: 'home',
-                url: "/clientes",
+                url: "/notas",
                 views: {
                     "auth": {
-                        controller: 'ClienteController as vm',
-                        templateUrl: "app/views/cliente.html",
+                        controller: 'NotaController as vm',
+                        templateUrl: "app/views/nota.html",
                     }
                 }
             })

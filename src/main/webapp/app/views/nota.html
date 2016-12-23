@@ -1,0 +1,40 @@
+
+<md-content  class="md-padding " layout-xs="column" layout="row">
+    <div flex-xs flex-gt-xs="50">
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    Nova Nota
+                </md-card-title-text>
+            </md-card-title>
+             <md-card-content>
+                  <div layout-gt-xs="row">
+
+                    <md-input-container class="md-block" flex="50">
+                        <input ng-model="vm.cliente.cnpj" placeholder="Numero Nota" required>
+                    </md-input-container>
+        
+                    <md-input-container class="md-block" flex=40>
+                        <input ng-model="vm.cliente.email" placeholder="Valor" required>
+                    </md-input-container>
+
+                     <md-input-container class="md-block" flex=40>
+                         <md-datepicker ng-model="vm.myDate" md-placeholder="Enter date"></md-datepicker>
+                    </md-input-container>
+                    
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    Minhas Notas
+                </md-card-title-text>
+            </md-card-title>
+             <md-card-content>
+            </md-card-content>
+        </md-card>
+    </div>
+</md-content>

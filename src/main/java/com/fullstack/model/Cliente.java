@@ -1,5 +1,6 @@
 package com.fullstack.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,11 +26,11 @@ public class Cliente {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
-	private List<AnexoCliente> anexos;
+	private List<AnexoCliente> anexos = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Nota> notas;
+	private List<Nota> notas = new ArrayList<>();
 
 	public Long getCnpj() {
 		return cnpj;
