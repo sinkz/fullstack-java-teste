@@ -173,6 +173,8 @@ Entre os critérios de avaliação estão:
 
 Se voce fosse utilizar esse sistema comercialmente, que alterações vc faria para escalar e/ou facilitar a vida do usuario? OBS: Voce pode descrever isso aqui ou mostrar na implementação.
 
+Resposta: Usaria docker como recusro de container, Redis de cache para aumentar a performance, usaria um servidor para os uploads
+
 # Sobre você
 
 Queremos saber um pouco mais sobre você também :) Por favor, responda o questionário do arquivo [questions.md](questions.md) e envie junto com seu projeto.

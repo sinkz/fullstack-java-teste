@@ -28,6 +28,7 @@ public class Cliente {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
+	@JsonIgnore
 	private List<AnexoCliente> anexos = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
