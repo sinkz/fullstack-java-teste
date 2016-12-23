@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.0
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -13,8 +13,6 @@
   * @description
   * Toast
   */
-MdToastDirective.$inject = ["$mdToast"];
-MdToastProvider.$inject = ["$$interimElementProvider"];
 angular.module('material.components.toast', [
   'material.core',
   'material.components.button'
@@ -37,6 +35,7 @@ function MdToastDirective($mdToast) {
     }
   };
 }
+MdToastDirective.$inject = ["$mdToast"];
 
 /**
   * @ngdoc service
@@ -307,7 +306,6 @@ function MdToastDirective($mdToast) {
 
 function MdToastProvider($$interimElementProvider) {
   // Differentiate promise resolves: hide timeout (value == true) and hide action clicks (value == ok).
-  toastDefaultOptions.$inject = ["$animate", "$mdToast", "$mdUtil", "$mdMedia"];
   var ACTION_RESOLVE = 'ok';
 
   var activeToastContent;
@@ -364,6 +362,7 @@ function MdToastProvider($$interimElementProvider) {
       activeToastContent = newContent;
     }
 
+  toastDefaultOptions.$inject = ["$animate", "$mdToast", "$mdUtil", "$mdMedia"];
     return $mdToast;
 
   /* ngInject */
@@ -486,5 +485,6 @@ function MdToastProvider($$interimElementProvider) {
   }
 
 }
+MdToastProvider.$inject = ["$$interimElementProvider"];
 
 })(window, window.angular);

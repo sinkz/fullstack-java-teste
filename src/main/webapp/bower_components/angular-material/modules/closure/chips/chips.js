@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.0
  */
 goog.provide('ngmaterial.components.chips');
 goog.require('ngmaterial.components.autocomplete');
@@ -19,8 +19,7 @@ angular.module('material.components.chips', [
   'material.components.autocomplete'
 ]);
 
-
-MdChipCtrl.$inject = ["$scope", "$element", "$mdConstant", "$timeout", "$mdUtil"];angular
+angular
   .module('material.components.chips')
   .controller('MdChipCtrl', MdChipCtrl);
 
@@ -76,6 +75,7 @@ function MdChipCtrl ($scope, $element, $mdConstant, $timeout, $mdUtil) {
    */
   this.enableChipEdit = false;
 }
+MdChipCtrl.$inject = ["$scope", "$element", "$mdConstant", "$timeout", "$mdUtil"];
 
 
 /**
@@ -213,8 +213,7 @@ MdChipCtrl.prototype.chipMouseDown = function() {
   }
 };
 
-
-MdChip.$inject = ["$mdTheming", "$mdUtil"];angular
+angular
     .module('material.components.chips')
     .directive('mdChip', MdChip);
 
@@ -282,9 +281,9 @@ function MdChip($mdTheming, $mdUtil) {
     };
   }
 }
+MdChip.$inject = ["$mdTheming", "$mdUtil"];
 
-
-MdChipRemove.$inject = ["$timeout"];angular
+angular
     .module('material.components.chips')
     .directive('mdChipRemove', MdChipRemove);
 
@@ -342,9 +341,9 @@ function MdChipRemove ($timeout) {
     });
   }
 }
+MdChipRemove.$inject = ["$timeout"];
 
-
-MdChipTransclude.$inject = ["$compile"];angular
+angular
     .module('material.components.chips')
     .directive('mdChipTransclude', MdChipTransclude);
 
@@ -369,9 +368,9 @@ function MdChipTransclude ($compile) {
     $compile(element.contents())(newScope);
   }
 }
+MdChipTransclude.$inject = ["$compile"];
 
-
-MdChipsCtrl.$inject = ["$scope", "$attrs", "$mdConstant", "$log", "$element", "$timeout", "$mdUtil"];angular
+angular
     .module('material.components.chips')
     .controller('MdChipsCtrl', MdChipsCtrl);
 
@@ -381,15 +380,13 @@ MdChipsCtrl.$inject = ["$scope", "$attrs", "$mdConstant", "$log", "$element", "$
  * the models of various input components.
  *
  * @param $scope
- * @param $attrs
  * @param $mdConstant
  * @param $log
  * @param $element
- * @param $timeout
  * @param $mdUtil
  * @constructor
  */
-function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $mdUtil) {
+function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
   /** @type {$timeout} **/
   this.$timeout = $timeout;
 
@@ -414,9 +411,6 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   /** @type {angular.NgModelController} */
   this.userInputNgModelCtrl = null;
 
-  /** @type {MdAutocompleteCtrl} */
-  this.autocompleteCtrl = null;
-
   /** @type {Element} */
   this.userInputElement = null;
 
@@ -426,11 +420,11 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   /** @type {number} */
   this.selectedChip = -1;
 
-  /** @type {string} */
-  this.enableChipEdit = $mdUtil.parseAttributeBoolean($attrs.mdEnableChipEdit);
+  /** @type {boolean} */
+  this.hasAutocomplete = false;
 
   /** @type {string} */
-  this.addOnBlur = $mdUtil.parseAttributeBoolean($attrs.mdAddOnBlur);
+  this.enableChipEdit = $mdUtil.parseAttributeBoolean(this.mdEnableChipEdit);
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.
@@ -475,6 +469,7 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
    * @type {boolean}
    */
 }
+MdChipsCtrl.$inject = ["$scope", "$mdConstant", "$log", "$element", "$timeout", "$mdUtil"];
 
 /**
  * Handles the keydown event on the input element: by default <enter> appends
@@ -486,7 +481,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
   var chipBuffer = this.getChipBuffer();
 
   // If we have an autocomplete, and it handled the event, we have nothing to do
-  if (this.autocompleteCtrl && event.isDefaultPrevented && event.isDefaultPrevented()) {
+  if (this.hasAutocomplete && event.isDefaultPrevented && event.isDefaultPrevented()) {
     return;
   }
 
@@ -514,7 +509,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
 
   // Support additional separator key codes in an array of `md-separator-keys`.
   if (this.separatorKeys.indexOf(event.keyCode) !== -1) {
-    if ((this.autocompleteCtrl && this.requireMatch) || !chipBuffer) return;
+    if ((this.hasAutocomplete && this.requireMatch) || !chipBuffer) return;
     event.preventDefault();
 
     // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
@@ -808,17 +803,7 @@ MdChipsCtrl.prototype.removeChip = function(index) {
 
 MdChipsCtrl.prototype.removeChipAndFocusInput = function (index) {
   this.removeChip(index);
-
-  if (this.autocompleteCtrl) {
-    // Always hide the autocomplete dropdown before focusing the autocomplete input.
-    // Wait for the input to move horizontally, because the chip was removed.
-    // This can lead to an incorrect dropdown position.
-    this.autocompleteCtrl.hidden = true;
-    this.$mdUtil.nextTick(this.onFocus.bind(this));
-  } else {
-    this.onFocus();
-  }
-
+  this.onFocus();
 };
 /**
  * Selects the chip at `index`,
@@ -900,23 +885,6 @@ MdChipsCtrl.prototype.onInputFocus = function () {
 
 MdChipsCtrl.prototype.onInputBlur = function () {
   this.inputHasFocus = false;
-
-  var chipBuffer = this.getChipBuffer().trim();
-
-  // Update the custom chip validators.
-  this.validateModel();
-
-  var isModelValid = this.ngModelCtrl.$valid;
-
-  if (this.userInputNgModelCtrl) {
-    isModelValid &= this.userInputNgModelCtrl.$valid;
-  }
-
-  // Only append the chip and reset the chip buffer if the chips and input ngModel is valid.
-  if (this.addOnBlur && chipBuffer && isModelValid) {
-    this.appendChip(chipBuffer);
-    this.resetChipBuffer();
-  }
 };
 
 /**
@@ -950,8 +918,8 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
-  if (ctrl) {
-    this.autocompleteCtrl = ctrl;
+  if ( ctrl ) {
+    this.hasAutocomplete = true;
 
     ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
       if (item) {
@@ -973,8 +941,7 @@ MdChipsCtrl.prototype.hasFocus = function () {
   return this.inputHasFocus || this.selectedChip >= 0;
 };
 
-  
-  MdChips.$inject = ["$mdTheming", "$mdUtil", "$compile", "$log", "$timeout", "$$mdSvgRegistry"];angular
+  angular
       .module('material.components.chips')
       .directive('mdChips', MdChips);
 
@@ -1074,8 +1041,6 @@ MdChipsCtrl.prototype.hasFocus = function () {
    * @param {number=} md-max-chips The maximum number of chips allowed to add through user input.
    *    <br/><br/>The validation property `md-max-chips` can be used when the max chips
    *    amount is reached.
-   * @param {boolean=} md-add-on-blur When set to true, remaining text inside of the input will
-   *    be converted into a new chip on blur.
    * @param {expression} md-transform-chip An expression of form `myFunction($chip)` that when called
    *    expects one of the following return values:
    *    - an object representing the `$chip` input string
@@ -1202,6 +1167,7 @@ MdChipsCtrl.prototype.hasFocus = function () {
         readonly: '=readonly',
         removable: '=mdRemovable',
         placeholder: '@',
+        mdEnableChipEdit: '@',
         secondaryPlaceholder: '@',
         maxChips: '@mdMaxChips',
         transformChip: '&mdTransformChip',
@@ -1337,14 +1303,11 @@ MdChipsCtrl.prototype.hasFocus = function () {
             // input.
             scope.$watch('$mdChipsCtrl.readonly', function(readonly) {
               if (!readonly) {
-
                 $mdUtil.nextTick(function(){
-
-                  if (chipInputTemplate.indexOf('<md-autocomplete') === 0) {
-                    var autocompleteEl = element.find('md-autocomplete');
-                    mdChipsCtrl.configureAutocomplete(autocompleteEl.controller('mdAutocomplete'));
-                  }
-
+                  if (chipInputTemplate.indexOf('<md-autocomplete') === 0)
+                    mdChipsCtrl
+                        .configureAutocomplete(element.find('md-autocomplete')
+                            .controller('mdAutocomplete'));
                   mdChipsCtrl.configureUserInput(element.find('input'));
                 });
               }
@@ -1376,6 +1339,7 @@ MdChipsCtrl.prototype.hasFocus = function () {
       };
     }
   }
+  MdChips.$inject = ["$mdTheming", "$mdUtil", "$compile", "$log", "$timeout", "$$mdSvgRegistry"];
 
 angular
     .module('material.components.chips')
@@ -1412,8 +1376,7 @@ MdContactChipsCtrl.prototype.filterSelectedContacts = function(contact) {
   return this.contacts.indexOf(contact) == -1;
 };
 
-
-MdContactChips.$inject = ["$mdTheming", "$mdUtil"];angular
+angular
   .module('material.components.chips')
   .directive('mdContactChips', MdContactChips);
 
@@ -1547,5 +1510,6 @@ function MdContactChips($mdTheming, $mdUtil) {
     };
   }
 }
+MdContactChips.$inject = ["$mdTheming", "$mdUtil"];
 
 ngmaterial.components.chips = angular.module("material.components.chips");

@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.0
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -14,12 +14,10 @@
 
 angular.module('material.components.menuBar', [
   'material.core',
-  'material.components.icon',
   'material.components.menu'
 ]);
 
 
-MenuBarController.$inject = ["$scope", "$rootScope", "$element", "$attrs", "$mdConstant", "$document", "$mdUtil", "$timeout"];
 angular
   .module('material.components.menuBar')
   .controller('MenuBarController', MenuBarController);
@@ -44,6 +42,7 @@ function MenuBarController($scope, $rootScope, $element, $attrs, $mdConstant, $d
     self[methodName] = angular.bind(self, self[methodName]);
   });
 }
+MenuBarController.$inject = ["$scope", "$rootScope", "$element", "$attrs", "$mdConstant", "$document", "$mdUtil", "$timeout"];
 
 MenuBarController.prototype.init = function() {
   var $element = this.$element;
@@ -87,7 +86,6 @@ MenuBarController.prototype.init = function() {
   }));
 
   $scope.$on('$destroy', function() {
-    self.disableOpenOnHover();
     while (deregisterFns.length) {
       deregisterFns.shift()();
     }
@@ -104,23 +102,17 @@ MenuBarController.prototype.setKeyboardMode = function(enabled) {
 
 MenuBarController.prototype.enableOpenOnHover = function() {
   if (this.openOnHoverEnabled) return;
+  this.openOnHoverEnabled = true;
 
-  var self = this;
-
-  self.openOnHoverEnabled = true;
-
-  if (self.parentToolbar) {
-    self.parentToolbar.classList.add('md-has-open-menu');
-
-    // Needs to be on the next tick so it doesn't close immediately.
-    self.$mdUtil.nextTick(function() {
-      angular.element(self.parentToolbar).on('click', self.handleParentClick);
-    }, false);
+  var parentToolbar;
+  if (parentToolbar = this.parentToolbar) {
+    parentToolbar.dataset.mdRestoreStyle = parentToolbar.getAttribute('style');
+    parentToolbar.style.position = 'relative';
+    parentToolbar.style.zIndex = 100;
   }
-
   angular
-    .element(self.getMenus())
-    .on('mouseenter', self.handleMenuHover);
+    .element(this.getMenus())
+    .on('mouseenter', this.handleMenuHover);
 };
 
 MenuBarController.prototype.handleMenuHover = function(e) {
@@ -130,16 +122,14 @@ MenuBarController.prototype.handleMenuHover = function(e) {
   }
 };
 
+
 MenuBarController.prototype.disableOpenOnHover = function() {
   if (!this.openOnHoverEnabled) return;
-
   this.openOnHoverEnabled = false;
-
-  if (this.parentToolbar) {
-    this.parentToolbar.classList.remove('md-has-open-menu');
-    angular.element(this.parentToolbar).off('click', this.handleParentClick);
+  var parentToolbar;
+  if (parentToolbar = this.parentToolbar) {
+    parentToolbar.style.cssText = parentToolbar.dataset.mdRestoreStyle || '';
   }
-
   angular
     .element(this.getMenus())
     .off('mouseenter', this.handleMenuHover);
@@ -256,6 +246,7 @@ MenuBarController.prototype.getFocusedMenuIndex = function() {
 
   var focusedIndex = this.getMenus().indexOf(focusedEl);
   return focusedIndex;
+
 };
 
 MenuBarController.prototype.getOpenMenuIndex = function() {
@@ -266,13 +257,7 @@ MenuBarController.prototype.getOpenMenuIndex = function() {
   return -1;
 };
 
-MenuBarController.prototype.handleParentClick = function(event) {
-  var openMenu = this.querySelector('md-menu.md-open');
 
-  if (openMenu && !openMenu.contains(event.target)) {
-    angular.element(openMenu).controller('mdMenu').close();
-  }
-};
 
 
 
@@ -370,7 +355,6 @@ MenuBarController.prototype.handleParentClick = function(event) {
  *
  */
 
-MenuBarDirective.$inject = ["$mdUtil", "$mdTheming"];
 angular
   .module('material.components.menuBar')
   .directive('mdMenuBar', MenuBarDirective);
@@ -422,6 +406,7 @@ function MenuBarDirective($mdUtil, $mdTheming) {
   };
 
 }
+MenuBarDirective.$inject = ["$mdUtil", "$mdTheming"];
 
 
 angular
@@ -441,7 +426,6 @@ function MenuDividerDirective() {
 }
 
 
-MenuItemController.$inject = ["$scope", "$element", "$attrs"];
 angular
   .module('material.components.menuBar')
   .controller('MenuItemController', MenuItemController);
@@ -455,6 +439,7 @@ function MenuItemController($scope, $element, $attrs) {
   this.$attrs = $attrs;
   this.$scope = $scope;
 }
+MenuItemController.$inject = ["$scope", "$element", "$attrs"];
 
 MenuItemController.prototype.init = function(ngModel) {
   var $element = this.$element;
@@ -547,13 +532,12 @@ MenuItemController.prototype.handleClick = function(e) {
 };
 
 
-MenuItemDirective.$inject = ["$mdUtil", "$$mdSvgRegistry"];
 angular
   .module('material.components.menuBar')
   .directive('mdMenuItem', MenuItemDirective);
 
  /* ngInject */
-function MenuItemDirective($mdUtil, $$mdSvgRegistry) {
+function MenuItemDirective($mdUtil) {
   return {
     controller: 'MenuItemController',
     require: ['mdMenuItem', '?ngModel'],
@@ -567,13 +551,11 @@ function MenuItemDirective($mdUtil, $$mdSvgRegistry) {
       if ((type == 'checkbox' || type == 'radio') && templateEl.hasClass(inMenuBarClass)) {
         var text = templateEl[0].textContent;
         var buttonEl = angular.element('<md-button type="button"></md-button>');
-        var iconTemplate = '<md-icon md-svg-src="' + $$mdSvgRegistry.mdChecked + '"></md-icon>';
-
-        buttonEl.html(text);
-        buttonEl.attr('tabindex', '0');
+            buttonEl.html(text);
+            buttonEl.attr('tabindex', '0');
 
         templateEl.html('');
-        templateEl.append(angular.element(iconTemplate));
+        templateEl.append(angular.element('<md-icon md-svg-icon="check"></md-icon>'));
         templateEl.append(buttonEl);
         templateEl.addClass('md-indent').removeClass(inMenuBarClass);
 
@@ -615,5 +597,6 @@ function MenuItemDirective($mdUtil, $$mdSvgRegistry) {
     }
   };
 }
+MenuItemDirective.$inject = ["$mdUtil"];
 
 })(window, window.angular);

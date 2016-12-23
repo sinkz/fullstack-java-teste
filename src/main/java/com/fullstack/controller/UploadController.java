@@ -5,13 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,10 +26,26 @@ public class UploadController {
 	@POST
 	@Path("/anexoCliente")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+	public Response uploadCliente(@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		try {
-			String uploadedFileLocation = "C:\\uploaded\\" + fileDetail.getFileName();
+			String uploadedFileLocation = "C:\\fullstack\\clientes\\" + fileDetail.getFileName();
+			writeToFile(uploadedInputStream, uploadedFileLocation);
+			String output = "File uploaded to : " + uploadedFileLocation;
+			return Response.status(200).entity(output).build();
+		} catch (Exception e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+
+	}
+	
+	@POST
+	@Path("/anexoNota")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadNota(@FormDataParam("file") InputStream uploadedInputStream,
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+		try {
+			String uploadedFileLocation = "C:\\fullstack\\notas\\" + fileDetail.getFileName();
 			writeToFile(uploadedInputStream, uploadedFileLocation);
 			String output = "File uploaded to : " + uploadedFileLocation;
 			return Response.status(200).entity(output).build();

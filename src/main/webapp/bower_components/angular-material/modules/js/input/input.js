@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.0
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -11,15 +11,6 @@
  * @ngdoc module
  * @name material.components.input
  */
-mdInputContainerDirective.$inject = ["$mdTheming", "$parse"];
-inputTextareaDirective.$inject = ["$mdUtil", "$window", "$mdAria", "$timeout", "$mdGesture"];
-mdMaxlengthDirective.$inject = ["$animate", "$mdUtil"];
-placeholderDirective.$inject = ["$compile"];
-ngMessageDirective.$inject = ["$mdUtil"];
-mdSelectOnFocusDirective.$inject = ["$timeout"];
-mdInputInvalidMessagesAnimation.$inject = ["$$AnimateRunner", "$animateCss", "$mdUtil"];
-ngMessagesAnimation.$inject = ["$$AnimateRunner", "$animateCss", "$mdUtil"];
-ngMessageAnimation.$inject = ["$$AnimateRunner", "$animateCss", "$mdUtil"];
 angular.module('material.components.input', [
     'material.core'
   ])
@@ -96,7 +87,6 @@ angular.module('material.components.input', [
  */
 function mdInputContainerDirective($mdTheming, $parse) {
 
-  ContainerCtrl.$inject = ["$scope", "$element", "$attrs", "$animate"];
   var INPUT_TAGS = ['INPUT', 'TEXTAREA', 'SELECT', 'MD-SELECT'];
 
   var LEFT_SELECTORS = INPUT_TAGS.reduce(function(selectors, isel) {
@@ -107,23 +97,22 @@ function mdInputContainerDirective($mdTheming, $parse) {
     return selectors.concat([isel + ' ~ md-icon', isel + ' ~ .md-icon']);
   }, []).join(",");
 
+  ContainerCtrl.$inject = ["$scope", "$element", "$attrs", "$animate"];
   return {
     restrict: 'E',
-    compile: compile,
+    link: postLink,
     controller: ContainerCtrl
   };
 
-  function compile(tElement) {
+  function postLink(scope, element) {
+    $mdTheming(element);
+
     // Check for both a left & right icon
-    var leftIcon = tElement[0].querySelector(LEFT_SELECTORS);
-    var rightIcon = tElement[0].querySelector(RIGHT_SELECTORS);
+    var leftIcon = element[0].querySelector(LEFT_SELECTORS);
+    var rightIcon = element[0].querySelector(RIGHT_SELECTORS);
 
-    if (leftIcon) { tElement.addClass('md-icon-left'); }
-    if (rightIcon) { tElement.addClass('md-icon-right'); }
-
-    return function postLink(scope, element) {
-      $mdTheming(element);
-    };
+    if (leftIcon) { element.addClass('md-icon-left'); }
+    if (rightIcon) { element.addClass('md-icon-right'); }
   }
 
   function ContainerCtrl($scope, $element, $attrs, $animate) {
@@ -160,6 +149,7 @@ function mdInputContainerDirective($mdTheming, $parse) {
     });
   }
 }
+mdInputContainerDirective.$inject = ["$mdTheming", "$parse"];
 
 function labelDirective() {
   return {
@@ -550,8 +540,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
         var container = containerCtrl.element;
         var dragGestureHandler = $mdGesture.register(handle, 'drag', { horizontal: false });
 
-
-        element.wrap('<div class="md-resize-wrapper">').after(handle);
+        element.after(handle);
         handle.on('mousedown', onMouseDown);
 
         container
@@ -628,6 +617,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
     }
   }
 }
+inputTextareaDirective.$inject = ["$mdUtil", "$window", "$mdAria", "$timeout", "$mdGesture"];
 
 function mdMaxlengthDirective($animate, $mdUtil) {
   return {
@@ -694,6 +684,7 @@ function mdMaxlengthDirective($animate, $mdUtil) {
     }
   }
 }
+mdMaxlengthDirective.$inject = ["$animate", "$mdUtil"];
 
 function placeholderDirective($compile) {
   return {
@@ -746,6 +737,7 @@ function placeholderDirective($compile) {
     }
   }
 }
+placeholderDirective.$inject = ["$compile"];
 
 /**
  * @ngdoc directive
@@ -827,6 +819,7 @@ function mdSelectOnFocusDirective($timeout) {
     }
   }
 }
+mdSelectOnFocusDirective.$inject = ["$timeout"];
 
 var visibilityDirectives = ['ngIf', 'ngShow', 'ngHide', 'ngSwitchWhen', 'ngSwitchDefault'];
 function ngMessagesDirective() {
@@ -908,6 +901,7 @@ function ngMessageDirective($mdUtil) {
     }
   }
 }
+ngMessageDirective.$inject = ["$mdUtil"];
 
 var $$AnimateRunner, $animateCss, $mdUtil;
 
@@ -922,6 +916,7 @@ function mdInputInvalidMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil) 
     // NOTE: We do not need the removeClass method, because the message ng-leave animation will fire
   };
 }
+mdInputInvalidMessagesAnimation.$inject = ["$$AnimateRunner", "$animateCss", "$mdUtil"];
 
 function ngMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil) {
   saveSharedServices($$AnimateRunner, $animateCss, $mdUtil);
@@ -952,24 +947,22 @@ function ngMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil) {
     }
   }
 }
+ngMessagesAnimation.$inject = ["$$AnimateRunner", "$animateCss", "$mdUtil"];
 
 function ngMessageAnimation($$AnimateRunner, $animateCss, $mdUtil) {
   saveSharedServices($$AnimateRunner, $animateCss, $mdUtil);
 
   return {
     enter: function(element, done) {
-      var animator = showMessage(element);
-
-      animator.start().done(done);
+      return showMessage(element);
     },
 
     leave: function(element, done) {
-      var animator = hideMessage(element);
-
-      animator.start().done(done);
+      return hideMessage(element);
     }
   }
 }
+ngMessageAnimation.$inject = ["$$AnimateRunner", "$animateCss", "$mdUtil"];
 
 function showInputMessages(element, done) {
   var animators = [], animator;
@@ -1024,6 +1017,7 @@ function showMessage(element) {
 function hideMessage(element) {
   var height = element[0].offsetHeight;
   var styles = window.getComputedStyle(element[0]);
+  //var styles = { opacity: element.css('opacity') };
 
   // If we are already hidden, just return an empty animation
   if (styles.opacity == 0) {

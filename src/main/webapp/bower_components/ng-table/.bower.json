@@ -1,0 +1,15 @@
+{
+  "name": "ng-table",
+  "homepage": "https://github.com/esvit/ng-table",
+  "version": "3.0.1",
+  "_release": "3.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.0.1",
+    "commit": "5317463bca7b1116616cf403a99ced74ff759ef9"
+  },
+  "_source": "https://github.com/esvit/ng-table.git",
+  "_target": "^3.0.1",
+  "_originalSource": "ng-table",
+  "_direct": true
+}

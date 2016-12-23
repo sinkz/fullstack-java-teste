@@ -13,6 +13,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.fullstack.dao.ClienteDAO;
 import com.fullstack.dao.NotaDAO;
 import com.fullstack.model.AnexoNota;
 import com.fullstack.model.Nota;
@@ -32,8 +34,10 @@ public class NotaController {
 				}
 			}
 			NotaDAO notaDAO = new NotaDAO();
+			ClienteDAO dao = new ClienteDAO();
 			notaDAO.salvar(nota);
-			return Response.ok().build();
+			return Response.status(200)
+					.entity(notaDAO.listarPorClientes(dao.buscarPorCodigo(nota.getCliente().getCnpj()))).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -76,6 +80,22 @@ public class NotaController {
 		try {
 			NotaDAO notaDAO = new NotaDAO();
 			List<Nota> notas = notaDAO.listAll();
+			return Response.status(200).entity(notas).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+
+	}
+
+	@Path("/listarPorCliente/{cnpj}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listarPorCliente(@PathParam("cnpj") Long cnpj) {
+		try {
+			ClienteDAO dao = new ClienteDAO();
+			NotaDAO notaDAO = new NotaDAO();
+			List<Nota> notas = notaDAO.listarPorClientes(dao.buscarPorCodigo(cnpj));
 			return Response.status(200).entity(notas).build();
 		} catch (Exception e) {
 			e.printStackTrace();

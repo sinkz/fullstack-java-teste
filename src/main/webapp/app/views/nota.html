@@ -1,5 +1,4 @@
-
-<md-content  class="md-padding " layout-xs="column" layout="row">
+<md-content class="md-padding " layout-xs="column" layout="row">
     <div flex-xs flex-gt-xs="50">
         <md-card>
             <md-card-title>
@@ -7,22 +6,57 @@
                     Nova Nota
                 </md-card-title-text>
             </md-card-title>
-             <md-card-content>
-                  <div layout-gt-xs="row">
-
-                    <md-input-container class="md-block" flex="50">
-                        <input ng-model="vm.cliente.cnpj" placeholder="Numero Nota" required>
-                    </md-input-container>
-        
-                    <md-input-container class="md-block" flex=40>
-                        <input ng-model="vm.cliente.email" placeholder="Valor" required>
-                    </md-input-container>
-
-                     <md-input-container class="md-block" flex=40>
-                         <md-datepicker ng-model="vm.myDate" md-placeholder="Enter date"></md-datepicker>
-                    </md-input-container>
-                    
-                </div>
+            <md-card-content>
+                <form name="notaForm">
+                    <div layout-gt-xs="row">
+                        <md-input-container class="md-block" flex="50">
+                            <input ng-model="vm.nota.numeroNota" placeholder="Numero Nota" required>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex=20>
+                            <input ng-model="vm.nota.valor" placeholder="Valor" required ui-money-mask>
+                        </md-input-container>
+                        <div flex-gt-xs style="margin-top: 14px;" bower install angular-material>
+                            <md-datepicker ng-model="vm.nota.dataEmissao" md-placeholder="Enter date" required></md-datepicker>
+                        </div>
+                    </div>
+                    <div layout-gt-xs="row">
+                        <md-input-container class="md-block" flex=100>
+                            <label>Descrição</label>
+                            <textarea required ng-model="vm.nota.descricao" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-xs="row">
+                        <md-button class="md-fab md-mini md-primary" aria-label="Use Android" type="file" ngf-select="setFile($file, $invalidFiles, 1)"
+                            ngf-max-height="10000" ngf-max-size="10MB">
+                            <md-icon md-svg-src="app/icons/upload.svg" style="color: greenyellow;"></md-icon>
+                        </md-button>
+                        <md-input-container class="md-block" flex-gt-xs>
+                            <input ng-model="vm.file.file1.name" placeholder="1 - Comércio" disabled required>
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-xs="row">
+                        <md-button class="md-fab md-mini md-primary" aria-label="Use Android" type="file" ngf-select="setFile($file, $invalidFiles, 2)"
+                            ngf-max-height="10000" ngf-max-size="10MB">
+                            <md-icon md-svg-src="app/icons/upload.svg" style="color: greenyellow;"></md-icon>
+                        </md-button>
+                        <md-input-container class="md-block" flex-gt-xs>
+                            <input ng-model="vm.file.file2.name" placeholder="2 - Indústria" disabled required>
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-xs="row">
+                        <md-button class="md-fab md-mini md-primary" aria-label="Use Android" type="file" ngf-select="setFile($file, $invalidFiles, 3)"
+                            ngf-max-height="10000" ngf-max-size="10MB">
+                            <md-icon md-svg-src="app/icons/upload.svg" style="color: greenyellow;"></md-icon>
+                        </md-button>
+                        <md-input-container class="md-block" flex-gt-xs>
+                            <input ng-model="vm.file.file3.name" placeholder="3 - Prestação de serviços" disabled required>
+                        </md-input-container>
+                    </div>
+                </form>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button class="md-raised md-primary" ng-click="vm.salvarNota(vm.nota)" ng-disabled="notaForm.$invalid">Salvar</md-button>
+                    <md-button ng-click="vm.showAdvanced($event)">Limpar</md-button>
+                </md-card-actions>
             </md-card-content>
         </md-card>
     </div>
@@ -33,7 +67,32 @@
                     Minhas Notas
                 </md-card-title-text>
             </md-card-title>
-             <md-card-content>
+            <md-card-content>
+                <md-table-container>
+                    <table md-table ng-model="selected" md-progress="promise">
+                        <thead md-head md-order="query.order">
+                            <tr md-row>
+                                <th md-column><span>Numero Nota</span></th>
+                                <th md-column><span>Data Nota</span></th>
+                                <th md-column>Valor</th>
+                                <th md-column>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row ng-repeat="nota in vm.notas  | limitTo: myLimit: (myPage  - 1) * myLimit">
+                                <td md-cell>{{nota.numeroNota}}</td>
+                                <td md-cell>{{nota.dataEmissao | date: 'dd-MM-yyyy' }}</td>
+                                <td md-cell>{{nota.valor | currency}}</td>
+                                <td md-cell>
+                                    <md-button class="md-icon-button md-primary" aria-label="Adicionar Anexos" ng-click="vm.showAdvanced($event, nota)">
+                                        <md-icon md-svg-icon="app/icons/note.svg"></md-icon>
+                                    </md-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+                <md-table-pagination md-limit="myLimit" md-page="myPage" md-total="{{vm.notas.length}}"></md-table-pagination>
             </md-card-content>
         </md-card>
     </div>

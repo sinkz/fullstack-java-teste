@@ -1,4 +1,4 @@
-<md-toolbar data-ng-controller="NavBarController">
+<md-toolbar data-ng-controller="NavBarController as vm">
     <div class="md-toolbar-tools">
         <h2>
             <span>Full Stack Teste</span>
@@ -8,11 +8,8 @@
             <md-nav-item md-nav-click="goto('page3')" data-ui-sref="notas" name="page3">Notas</md-nav-item>
         </md-nav-bar>
         <span flex></span>
-        <md-button class="md-raised" aria-label="Learn More">
-           Trocar Cliente
-        </md-button>
-        <md-button class="md-fab md-mini" aria-label="Favorite">
-            <md-icon></md-icon>
+        <md-button class="md-raised" aria-label="Learn More" ng-click="vm.sair()">
+            Limpar Local Storage
         </md-button>
     </div>
 </md-toolbar>

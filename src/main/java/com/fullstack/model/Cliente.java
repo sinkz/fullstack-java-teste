@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Cliente {
 
@@ -30,6 +32,7 @@ public class Cliente {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cliente", cascade = CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
+	@JsonIgnore
 	private List<Nota> notas = new ArrayList<>();
 
 	public Long getCnpj() {

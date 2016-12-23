@@ -7,12 +7,13 @@
     function LoginController($scope, $state, $timeout, $mdDialog, Upload, clienteAPI, $rootScope, $localStorage) {
         var vm = this;
         $rootScope.anexos = [];
+        $rootScope.files = [];
         vm.cliente = {};
 
 
         vm.entrar = function (cliente) {
             clienteAPI.login(cliente).then(function (response) {
-                delete  $localStorage.usuario;
+                delete $localStorage.usuario;
                 $localStorage.usuario = response.data;
                 console.log($localStorage.usuario);
                 $state.go('home');
@@ -42,8 +43,7 @@
                     clickOutsideToClose: true,
                     fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
                 })
-                .then(function (cliente, files) {
-                    console.log(files);
+                .then(function (cliente) {
                     salvarCliente(cliente);
 
                 }, function () {
@@ -61,53 +61,48 @@
             cliente.anexos = $rootScope.anexos;
             console.log(cliente.anexos);
             clienteAPI.salvar(cliente).then(function (response) {
-                console.log(response);
+
+                angular.forEach($rootScope.files, function (file) {
+                    file.upload = Upload.upload({
+                        url: 'http://localhost:8080/FullstackJava/rest/anexo/anexoCliente',
+                        data: {
+                            file: file
+                        }
+                    });
+                    file.upload.then(function (response) {
+                        $timeout(function () {
+                            file.result = response.data;
+                        });
+                    }, function (response) {
+                        if (response.status > 0)
+                            $scope.errorMsg = response.status + ': ' + response.data;
+                    }, function (evt) {
+                        file.progress = Math.min(100, parseInt(100.0 *
+                            evt.loaded / evt.total));
+                    });
+                });
+
             }, function (err) {
                 console.log(err);
             })
-            console.log(cliente);
             delete vm.cliente;
         }
 
 
         $scope.uploadFiles = function (files, errFiles) {
-            console.log(files);
-
             var anexos = [];
             angular.forEach(files, function (file) {
                 var aux = {
                     nomeAnexo: file.name,
-                    caminhoAnexo: 'src/main/webapp/uploads/clientes',
+                    caminhoAnexo: 'C:/fullstack/clientes',
                 }
                 anexos.push(aux);
                 aux = {};
             });
             vm.cliente.anexos = anexos;
             $rootScope.anexos = anexos;
-            vm.files = files;
+            $rootScope.files = files;
             vm.errFiles = errFiles;
-
-            angular.forEach(files, function (file) {
-                file.upload = Upload.upload({
-                    url: 'http://localhost:8080/FullstackJava/rest/anexo/anexoCliente',
-                    data: {
-                        file: file
-                    }
-                });
-
-                file.upload.then(function (response) {
-                    $timeout(function () {
-                        file.result = response.data;
-                    });
-                }, function (response) {
-                    if (response.status > 0)
-                        $scope.errorMsg = response.status + ': ' + response.data;
-                }, function (evt) {
-                    file.progress = Math.min(100, parseInt(100.0 *
-                        evt.loaded / evt.total));
-                });
-            });
-
         }
 
 

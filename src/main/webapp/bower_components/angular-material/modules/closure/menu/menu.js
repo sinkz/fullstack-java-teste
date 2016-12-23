@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.0
  */
 goog.provide('ngmaterial.components.menu');
 goog.require('ngmaterial.components.backdrop');
@@ -19,7 +19,6 @@ angular.module('material.components.menu', [
 
 
 
-MenuController.$inject = ["$mdMenu", "$attrs", "$element", "$scope", "$mdUtil", "$timeout", "$rootScope", "$q"];
 angular
     .module('material.components.menu')
     .controller('mdMenuCtrl', MenuController);
@@ -255,6 +254,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     }
   };
 }
+MenuController.$inject = ["$mdMenu", "$attrs", "$element", "$scope", "$mdUtil", "$timeout", "$rootScope", "$q"];
 
 /**
  * @ngdoc directive
@@ -292,7 +292,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
  *
  * The width of the menu when it is open may be specified by specifying a `width`
  * attribute on the `md-menu-content` element.
- * See the [Material Design Spec](https://material.google.com/components/menus.html#menus-simple-menus)
+ * See the [Material Design Spec](http://www.google.com/design/spec/components/menus.html#menus-specs)
  * for more information.
  *
  *
@@ -413,7 +413,6 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
  *
  */
 
-MenuDirective.$inject = ["$mdUtil"];
 angular
     .module('material.components.menu')
     .directive('mdMenu', MenuDirective);
@@ -492,9 +491,9 @@ function MenuDirective($mdUtil) {
 
   }
 }
+MenuDirective.$inject = ["$mdUtil"];
 
-
-MenuProvider.$inject = ["$$interimElementProvider"];angular
+angular
   .module('material.components.menu')
   .provider('$mdMenu', MenuProvider);
 
@@ -509,9 +508,9 @@ MenuProvider.$inject = ["$$interimElementProvider"];angular
  */
 
 function MenuProvider($$interimElementProvider) {
-  menuDefaultOptions.$inject = ["$mdUtil", "$mdTheming", "$mdConstant", "$document", "$window", "$q", "$$rAF", "$animateCss", "$animate"];
   var MENU_EDGE_MARGIN = 8;
 
+  menuDefaultOptions.$inject = ["$mdUtil", "$mdTheming", "$mdConstant", "$document", "$window", "$q", "$$rAF", "$animateCss", "$animate"];
   return $$interimElementProvider('$mdMenu')
     .setDefaults({
       methods: ['target'],
@@ -1021,5 +1020,6 @@ function MenuProvider($$interimElementProvider) {
     return el;
   }
 }
+MenuProvider.$inject = ["$$interimElementProvider"];
 
 ngmaterial.components.menu = angular.module("material.components.menu");

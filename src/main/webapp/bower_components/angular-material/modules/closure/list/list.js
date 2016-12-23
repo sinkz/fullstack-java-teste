@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.1
+ * v1.1.0
  */
 goog.provide('ngmaterial.components.list');
 goog.require('ngmaterial.core');
@@ -12,9 +12,6 @@ goog.require('ngmaterial.core');
  * @description
  * List module
  */
-MdListController.$inject = ["$scope", "$element", "$mdListInkRipple"];
-mdListDirective.$inject = ["$mdTheming"];
-mdListItemDirective.$inject = ["$mdAria", "$mdConstant", "$mdUtil", "$timeout"];
 angular.module('material.components.list', [
   'material.core'
 ])
@@ -55,6 +52,7 @@ function mdListDirective($mdTheming) {
     }
   };
 }
+mdListDirective.$inject = ["$mdTheming"];
 /**
  * @ngdoc directive
  * @name mdListItem
@@ -559,6 +557,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
     }
   };
 }
+mdListItemDirective.$inject = ["$mdAria", "$mdConstant", "$mdUtil", "$timeout"];
 
 /*
  * @private
@@ -576,5 +575,6 @@ function MdListController($scope, $element, $mdListInkRipple) {
     $mdListInkRipple.attach(scope, element, options);
   }
 }
+MdListController.$inject = ["$scope", "$element", "$mdListInkRipple"];
 
 ngmaterial.components.list = angular.module("material.components.list");

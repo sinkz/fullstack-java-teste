@@ -28,6 +28,7 @@ public class ClienteController {
 		try {
 			if (cliente.getAnexos().size() != 0) {
 				for (AnexoCliente a : cliente.getAnexos()) {
+					System.out.println(a.getNomeAnexo());
 					a.setDataCriacao(new Date());
 					a.setCliente(cliente);
 				}

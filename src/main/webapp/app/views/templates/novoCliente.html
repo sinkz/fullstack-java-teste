@@ -25,15 +25,15 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <md-input-container class="md-block" flex-gt-xs>
+                    <md-input-container class="md-block" flex-gt-xs ng-if="vm.cliente.regimeTributario == 'Simples Nacional'">
                         <input ng-model="vm.cliente.anexos" placeholder="Anexos">
                     </md-input-container>
-                    <md-button class="md-fab md-mini md-primary" aria-label="Use Android" ngf-select="uploadFiles($files, $invalidFiles)"
-                        multiple  ngf-max-height="5000" ngf-max-size="5MB">
+                  
+                    <md-button ng-if="vm.cliente.regimeTributario == 'Simples Nacional'" class="md-fab md-mini md-primary" aria-label="Use Android"
+                        ngf-select="uploadFiles($files, $invalidFiles)" multiple ngf-max-height="5000" ngf-max-size="5MB">
                         <md-icon md-svg-src="app/icons/upload.svg" style="color: greenyellow;"></md-icon>
                     </md-button>
                 </div>
-
                 <md-dialog-actions layout="row">
                     <md-button ng-click="answer(vm.cliente)">
                         Salvar
@@ -43,4 +43,3 @@
         </md-card-content>
     </md-card>
 </md-dialog>
-
